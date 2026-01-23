@@ -11,6 +11,7 @@ function Book(title,author,pages,read) {
     function addBookToLibrary(title,author, pages, read) {
 const book = new Book (title,author,pages,read);
 myLibrary.push(book);
+displayLibrary()
     }
 
 Book.prototype.toggleRead = function () {
@@ -28,9 +29,18 @@ myLibrary.forEach(book =>{
     const card = document.createElement("div");
 
     card.classList.add("card")
-    card.textContent = 
-    `${book.title} 
-    ${book.author}`
+    card.dataset.id = book.id;
+    card.textContent =  `${book.title} by ${book.author}`
+
+    const removeBtn = document.createElement("button");
+    removeBtn.textContent = "Remove";
+    removeBtn.classList.add("remove-btn");
+    removeBtn.addEventListener("click", () => {
+        removeBook(book.id);
+    })
+
+  
+    card.appendChild(removeBtn);
     libraryDiv.appendChild(card);
 })
 }
