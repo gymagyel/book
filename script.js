@@ -30,7 +30,7 @@ myLibrary.forEach(book =>{
 
     card.classList.add("card")
     card.dataset.id = book.id;
-    card.textContent =  `${book.title} by ${book.author}`
+    card.textContent =  `${book.title} by ${book.author} ${book.pages} pages`
 
     const removeBtn = document.createElement("button");
     removeBtn.textContent = "Remove";
@@ -39,9 +39,47 @@ myLibrary.forEach(book =>{
         removeBook(book.id);
     })
 
+    function removeBook(id) {
+        const index = myLibrary.findIndex(book => book.id === id);
+        if (index !== -1) {
+            myLibrary.splice(index, 1);
+            displayLibrary()
+        }
+    }
+
+    const status=document.createElement("p");
+    status.textContent = book.read ? "Read" : "Not read";
+
+    const toggleBtn = document.createElement("button")
+    toggleBtn.textContent = "Toggle read" ;
+    toggleBtn.classList.add ("toggle-btn");
+    toggleBtn.addEventListener("click", () => {
+  book.toggleRead();
+  displayLibrary();
+});
+if (book.read) {
+  card.classList.add("read");
+} else {
+  card.classList.add("not-read");
+}
+
+
   
     card.appendChild(removeBtn);
+    card.appendChild(toggleBtn);
+    card.appendChild (status);
     libraryDiv.appendChild(card);
 })
 }
 displayLibrary();
+document.getElementById("book-form").addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  const title = document.getElementById("title").value;
+  const author = document.getElementById("author").value;
+  const pages = document.getElementById("pages").value;
+  const read = document.getElementById("read").checked;
+
+  addBookToLibrary(title, author, pages, read);
+});
+
