@@ -73,14 +73,22 @@ gap:8px;
   font-size: 0.85rem;
 }
 
+.book-form{
+  display: flex;
+}
+
 #book-form{
     
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  
+  flex-direction: column;
+  gap: 12px;
     max-width: 400px;
-   margin: 20px;
+    
+   margin: 20px auto;
     border: 1px solid #ddd;
     border-radius: 8px;
     padding: 16px;
+   
     background: #fafafa;
    
 }
@@ -88,10 +96,23 @@ gap:8px;
 h3 {
 
     padding-bottom: 10px;
+    text-align: center;
  
 }
 
 .hidden {
   display: none;
+}
+
+.new-book-btn {
+
+  display: block;
+  margin: 40px auto;
+  background-color: yellow;
+  padding: 20px;
+  font-size: 30px;
+  border-radius: 8px;
+  border: 2px solid rgb(153, 155, 149);
+ 
 }
 
