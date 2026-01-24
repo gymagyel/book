@@ -1,5 +1,22 @@
 
+console.log(document.getElementById("book-form"));
+
 const myLibrary = []
+const storedLibrary = localStorage.getItem("myLibrary");
+
+if (storedLibrary) {
+  const books = JSON.parse(storedLibrary);
+  books.forEach(bookData => {
+    const book = new Book(
+      bookData.title,
+      bookData.author,
+      bookData.pages,
+      bookData.read
+    );
+    book.id = bookData.id; // preserve ID
+    myLibrary.push(book);
+  });
+}
 function Book(title,author,pages,read) {
     this.id = crypto.randomUUID();
     this.title = title;
@@ -8,15 +25,16 @@ function Book(title,author,pages,read) {
     this.read = read;
 }
 
-    function addBookToLibrary(title,author, pages, read) {
-const book = new Book (title,author,pages,read);
-myLibrary.push(book);
-displayLibrary()
-    }
-
 Book.prototype.toggleRead = function () {
   this.read = !this.read;
 };
+
+    function addBookToLibrary(title,author, pages, read) {
+const book = new Book (title,author,pages,read);
+myLibrary.push(book);
+saveLibrary();   
+displayLibrary()
+    }
 
 addBookToLibrary('The Hobbit', 'J.R.R. Tolkien', 293, false)
 addBookToLibrary("Dune", "Frank Herbert", 412, true)
@@ -24,6 +42,15 @@ addBookToLibrary("Dune", "Frank Herbert", 412, true)
 function displayLibrary() {
     const libraryDiv = document.getElementById("library");
     libraryDiv.innerHTML="";
+
+    function removeBook(id) {
+        const index = myLibrary.findIndex(book => book.id === id);
+        if (index !== -1) {
+            myLibrary.splice(index, 1);
+            saveLibrary();   
+            displayLibrary()
+        }
+    }
 
 myLibrary.forEach(book =>{
     const card = document.createElement("div");
@@ -39,13 +66,7 @@ myLibrary.forEach(book =>{
         removeBook(book.id);
     })
 
-    function removeBook(id) {
-        const index = myLibrary.findIndex(book => book.id === id);
-        if (index !== -1) {
-            myLibrary.splice(index, 1);
-            displayLibrary()
-        }
-    }
+    
 
     const status=document.createElement("p");
     status.textContent = book.read ? "Read" : "Not read";
@@ -55,6 +76,7 @@ myLibrary.forEach(book =>{
     toggleBtn.classList.add ("toggle-btn");
     toggleBtn.addEventListener("click", () => {
   book.toggleRead();
+  saveLibrary();   
   displayLibrary();
 });
 if (book.read) {
@@ -72,6 +94,12 @@ if (book.read) {
 })
 }
 displayLibrary();
+
+
+
+const newBookBtn = document.getElementById("new-book-btn");
+const bookForm = document.getElementById("book-form");
+
 document.getElementById("book-form").addEventListener("submit", (e) => {
   e.preventDefault();
 
@@ -81,5 +109,15 @@ document.getElementById("book-form").addEventListener("submit", (e) => {
   const read = document.getElementById("read").checked;
 
   addBookToLibrary(title, author, pages, read);
+
+    bookForm.reset();               // NEW
+  bookForm.classList.add("hidden");
+  
+});
+newBookBtn.addEventListener("click", () => {
+  bookForm.classList.toggle("hidden");
 });
 
+function saveLibrary(){
+  localStorage.setItem("myLibrary", JSON.stringify(myLibrary));
+}
