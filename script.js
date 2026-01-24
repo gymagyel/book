@@ -36,8 +36,7 @@ saveLibrary();
 displayLibrary()
     }
 
-addBookToLibrary('The Hobbit', 'J.R.R. Tolkien', 293, false)
-addBookToLibrary("Dune", "Frank Herbert", 412, true)
+
 
 function displayLibrary() {
     const libraryDiv = document.getElementById("library");
@@ -116,6 +115,7 @@ document.getElementById("book-form").addEventListener("submit", (e) => {
 });
 newBookBtn.addEventListener("click", () => {
   bookForm.classList.toggle("hidden");
+  newBookBtn.classList.add("new-book-btn");
 });
 
 function saveLibrary(){
